@@ -11,6 +11,14 @@
   display: none;
 }
 
-.place-card:hover .place-card__delete-icon {
+.place-card:hover .place-card__delete-icon_visible {
   display: block;
+} 
+
+/* .place-card__delete-icon_visible {
+  display: block;
+} */
+
+.place-card__delete-icon_hidden {
+  display: none;
 }

@@ -1,19 +1,35 @@
 import React from "react";
+import { CurrentUserContext } from "../context/CurrentUserContext";
 
 function Card(props) {
-  return(
+  const currentUser = React.useContext(CurrentUserContext);
+  const isOwn = props.card.owner._id === currentUser._id;
+  const cardDeleteButtonClassName = `place-card__delete-icon ${
+    isOwn ? "place-card__delete-icon_visible" : "place-card__delete-icon_hidden"
+  }`;
+  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
+  const cardLikeButtonClassName = `place-card__like-icon ${
+    isLiked && "place-card__like-icon_liked"
+  }`;
+  function handleClick() {
+    props.onCardClick(props.card);
+  }
+
+  return (
     <div className="place-card" key={props.card_id}>
       <div
         className="place-card__image"
         style={{
           backgroundImage: `url(${props.card.link})`,
         }}
+        onClick={handleClick}
       >
-        <button className="place-card__delete-icon"></button>
+        <button className={cardDeleteButtonClassName}></button>
       </div>
       <div className="place-card__description">
         <h3 className="place-card__name">{props.card.name}</h3>
-        <button className="place-card__like-icon"></button>
+        <button className={cardLikeButtonClassName}></button>
+        <p className="place-card__like-counter">{props.card.likes.length}</p>
       </div>
     </div>
   );
