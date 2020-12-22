@@ -6,6 +6,8 @@ import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/API";
 import { CurrentUserContext } from "../context/CurrentUserContext";
+import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
 
 function App() {
   const [isEditProfilePopupOpen, setisEditProfilePopupOpen] = React.useState(0);
@@ -37,6 +39,28 @@ function App() {
     setSelectedCard(false);
   }
 
+  function handleUpdateUser(data) {
+    const { name, about } = data;
+    api
+      .editUserInfo("users/me", name, about)
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopup();
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function handleAvatar(data) {
+    const { avatar } = data;
+    api
+      .updateAvatar("users/me/avatar", avatar)
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopup();
+      })
+      .catch((err) => console.log(err));
+  }
+
   React.useEffect(() => {
     api
       .getUserInfo("users/me")
@@ -53,6 +77,16 @@ function App() {
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+        />
+        <EditProfilePopup
+          isOpened={isEditProfilePopupOpen}
+          onClose={closeAllPopup}
+          onUpdateUser={handleUpdateUser}
+        />
+        <EditAvatarPopup
+          isOpened={isEditAvatarPopupOpen}
+          onClose={closeAllPopup}
+          onUpdateAvatar={handleAvatar}
         />
         <ImagePopup card={selectedCard} onClose={closeAllPopup} />
         <PopupWithForm
@@ -83,60 +117,7 @@ function App() {
             +
           </button>{" "}
         </PopupWithForm>
-        <PopupWithForm
-          name="edit"
-          title="Редактировать профиль"
-          isOpened={isEditProfilePopupOpen}
-          onClose={closeAllPopup}
-        >
-          <input
-            type="text"
-            name="user"
-            className="popup__input popup__input_type_name"
-            placeholder="Имя"
-            required
-            minLength="2"
-            maxLength="30"
-          />
-          <span className="popup__error" data-for="user"></span>
-          <input
-            type="text"
-            name="job"
-            className="popup__input popup__input_type_job"
-            placeholder="О себе"
-            required
-            minLength="2"
-            maxLength="30"
-          />
-          <span className="popup__error" data-for="job"></span>
-          <button
-            type
-            className="button popup__button popup__button_font-size popup__button_active"
-          >
-            Сохранить
-          </button>
-        </PopupWithForm>
-        <PopupWithForm
-          name="avatar"
-          title="Обновить аватар"
-          isOpened={isEditAvatarPopupOpen}
-          onClose={closeAllPopup}
-        >
-          <input
-            type="url"
-            name="link"
-            className="popup__input popup__input_type_link-url"
-            placeholder="Ссылка на аватар"
-            required
-          />
-          <span className="popup__error" data-for="link"></span>
-          <button
-            type
-            className="button popup__button popup__button_font-size popup__button_active"
-          >
-            Сохранить
-          </button>
-        </PopupWithForm>
+
         <Footer />
       </div>
     </CurrentUserContext.Provider>

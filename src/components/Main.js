@@ -6,6 +6,7 @@ import Card from "./Card";
 function Main(props) {
   let [cards, setCards] = React.useState([]);
   const currentUser = React.useContext(CurrentUserContext);
+  const avatarRef = React.useRef();
 
   React.useEffect(() => {
     api
@@ -26,6 +27,16 @@ function Main(props) {
       });
   }
 
+  function handleCardDelete(card) {
+    const isMine = card.owner._id === currentUser._id;
+    isMine
+      ? api.deleteCard("cards", card._id).then((deletedCard) => {
+          const newCards = cards.filter((c) => c._id !== deletedCard._id);
+          setCards(newCards);
+        })
+      : console.log("Нет прав на выполнение действия");
+  }
+
   return (
     <main className="main">
       <div className="profile root__section">
@@ -34,6 +45,7 @@ function Main(props) {
             className="user-info__photo"
             style={{ backgroundImage: `url(${currentUser.avatar})` }}
             onClick={props.onEditAvatar}
+            ref={avatarRef}
           ></div>
           <div className="user-info__data">
             <h1 className="user-info__name">{currentUser.name}</h1>
@@ -59,6 +71,7 @@ function Main(props) {
             card={item}
             onCardClick={props.onCardClick}
             onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
           />
         ))}
       </div>

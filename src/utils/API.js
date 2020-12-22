@@ -58,6 +58,16 @@ class Api {
       : this.deleteCard(partOfUrl, cardId);
   };
 
+  updateAvatar = (partOfUrl, avatar) => {
+    return fetch(`${this.url}${partOfUrl}`, {
+      method: "PATCH",
+      headers: this.headers,
+      body: JSON.stringify({
+        avatar: avatar,
+      }),
+    }).then((res) => this._checkStatus(res));
+  };
+
   _checkStatus = (res) => {
     if (!res.ok) {
       console.log(res);

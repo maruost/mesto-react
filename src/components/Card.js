@@ -4,18 +4,23 @@ import { CurrentUserContext } from "../context/CurrentUserContext";
 function Card(props) {
   const currentUser = React.useContext(CurrentUserContext);
   const isOwn = props.card.owner._id === currentUser._id;
+  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
   const cardDeleteButtonClassName = `place-card__delete-icon ${
     isOwn ? "place-card__delete-icon_visible" : "place-card__delete-icon_hidden"
   }`;
-  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
   const cardLikeButtonClassName = `place-card__like-icon ${
     isLiked ? "place-card__like-icon_liked" : "place-card__like-icon_disliked"
   }`;
+
   function handleClick() {
     props.onCardClick(props.card);
   }
   function handleLike() {
     props.onCardLike(props.card);
+  }
+  function handleDelete() {
+    props.onCardDelete(props.card);
+    props.card.remove();
   }
 
   return (
@@ -27,7 +32,10 @@ function Card(props) {
         }}
         onClick={handleClick}
       >
-        <button className={cardDeleteButtonClassName}></button>
+        <button
+          className={cardDeleteButtonClassName}
+          onClick={handleDelete}
+        ></button>
       </div>
       <div className="place-card__description">
         <h3 className="place-card__name">{props.card.name}</h3>
