@@ -12,7 +12,19 @@ function Main(props) {
       .getInitialCards("cards")
       .then((res) => setCards([...cards, ...res]))
       .catch((err) => console.log(err));
-  });
+  }, []);
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    console.log(!isLiked);
+    api
+      .changeLikeCardStatus("cards/like", card._id, !isLiked)
+      .then((newCard) => {
+        console.log(newCard);
+        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        setCards(newCards);
+      });
+  }
 
   return (
     <main className="main">
@@ -43,7 +55,11 @@ function Main(props) {
       </div>
       <div className="places-list root__section">
         {cards.map((item) => (
-          <Card card={item} onCardClick={props.onCardClick} />
+          <Card
+            card={item}
+            onCardClick={props.onCardClick}
+            onCardLike={handleCardLike}
+          />
         ))}
       </div>
     </main>

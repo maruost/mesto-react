@@ -42,7 +42,7 @@ function App() {
       .getUserInfo("users/me")
       .then((res) => setCurrentUser(res))
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
