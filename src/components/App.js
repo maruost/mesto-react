@@ -2,18 +2,20 @@ import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Main from "./Main";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/API";
 import { CurrentUserContext } from "../context/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import AlertPopup from "./AlertPopup";
 
 function App() {
   const [isEditProfilePopupOpen, setisEditProfilePopupOpen] = React.useState(0);
   const [isAddPlacePopupOpen, setisAddPlacePopupOpen] = React.useState(0);
   const [isEditAvatarPopupOpen, setisEditAvatarPopupOpen] = React.useState(0);
+  const [isAlertPopupOpen, setisAlertPopupOpen] = React.useState(0);
+  const [isPicPopupOpen, setisPicPopupOpen] = React.useState(0);
   const [selectedCard, setSelectedCard] = React.useState(0);
   const [currentUser, setCurrentUser] = React.useState("");
   let [cards, setCards] = React.useState([]);
@@ -45,13 +47,20 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    const isMine = card.owner._id === currentUser._id;
-    isMine
-      ? api.deleteCard("cards", card._id).then((deletedCard) => {
-          const newCards = cards.filter((c) => c._id !== deletedCard._id);
-          setCards(newCards);
-        })
-      : console.log("Нет прав на выполнение действия");
+    api.deleteCard("cards", card._id).then((deletedCard) => {
+      const newCards = cards.filter((c) => c._id !== deletedCard._id);
+      setCards(newCards);
+      closeAllPopup();
+    });
+  }
+  function handleShowCards() {
+    api
+      .getInitialCards("cards")
+      .then((res) => {
+        const newCards = res.filter((c) => c.owner._id === currentUser._id);
+        setCards(newCards);
+      })
+      .catch((err) => console.log(err));
   }
 
   function handleEditAvatarClick() {
@@ -68,13 +77,21 @@ function App() {
 
   function handleCardClick(card) {
     setSelectedCard(card);
+    setisPicPopupOpen(true);
+  }
+
+  function handleDeleteClick(card) {
+    setSelectedCard(card);
+    setisAlertPopupOpen(true);
   }
 
   function closeAllPopup() {
     setisEditAvatarPopupOpen(false);
     setisEditProfilePopupOpen(false);
     setisAddPlacePopupOpen(false);
-    setSelectedCard(false);
+    setisPicPopupOpen(false);
+    // setSelectedCard(false);
+    setisAlertPopupOpen(false);
   }
 
   function handleUpdateUser(data) {
@@ -118,10 +135,11 @@ function App() {
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
+          onPicClick={handleCardClick}
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleDeleteClick}
+          onShowCards={handleShowCards}
         />
         <EditProfilePopup
           isOpened={isEditProfilePopupOpen}
@@ -133,11 +151,21 @@ function App() {
           onClose={closeAllPopup}
           onUpdateAvatar={handleAvatar}
         />
-        <ImagePopup card={selectedCard} onClose={closeAllPopup} />
+        <ImagePopup
+          card={selectedCard}
+          onClose={closeAllPopup}
+          isOpened={isPicPopupOpen}
+        />
         <AddPlacePopup
           isOpened={isAddPlacePopupOpen}
           onClose={closeAllPopup}
           onAddPlace={handleAddPlaceSubmit}
+        />
+        <AlertPopup
+          card={selectedCard}
+          isOpened={isAlertPopupOpen}
+          onClose={closeAllPopup}
+          onCardDelete={handleCardDelete}
         />
 
         <Footer />

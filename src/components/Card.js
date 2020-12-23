@@ -13,30 +13,31 @@ function Card(props) {
   }`;
 
   function handleClick() {
-    props.onCardClick(props.card);
+    props.onPicClick(props.card);
   }
   function handleLike() {
     props.onCardLike(props.card);
   }
   function handleDelete() {
     props.onCardDelete(props.card);
-    props.card.remove();
   }
 
   return (
     <div className="place-card" key={props.card_id}>
+      <div className="place-card__image-wrapper">
+        <button
+          className={cardDeleteButtonClassName}
+          onClick={handleDelete}
+        ></button>
+      </div>
       <div
         className="place-card__image"
         style={{
           backgroundImage: `url(${props.card.link})`,
         }}
         onClick={handleClick}
-      >
-        <button
-          className={cardDeleteButtonClassName}
-          onClick={handleDelete}
-        ></button>
-      </div>
+      ></div>
+
       <div className="place-card__description">
         <h3 className="place-card__name">{props.card.name}</h3>
         <div className="place-card__like-wrapper">

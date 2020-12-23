@@ -9,11 +9,12 @@
   right: 15px;
   cursor: pointer;
   display: none;
+  z-index: 1;
 }
 
 .place-card:hover .place-card__delete-icon_visible {
   display: block;
-} 
+}
 
 /* .place-card__delete-icon_visible {
   display: block;

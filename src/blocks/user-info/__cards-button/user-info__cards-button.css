@@ -1,0 +1,11 @@
+.user-info__cards-button {
+  height: 18px;
+  font-size: 12px;
+  line-height: 15px;
+  margin-left: 10px;
+}
+
+.user-info__cards-button:hover {
+  color: #000000;
+  background-color: #ffffff;
+}

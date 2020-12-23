@@ -1,0 +1,5 @@
+.popup__buttons-wrapper{
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+}

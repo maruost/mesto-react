@@ -17,12 +17,20 @@ function Main(props) {
           <div className="user-info__data">
             <h1 className="user-info__name">{currentUser.name}</h1>
             <p className="user-info__job">{currentUser.about}</p>
-            <button
-              className="button user-info__edit-button"
-              onClick={props.onEditProfile}
-            >
-              Edit
-            </button>
+            <div className="user-info__buttons">
+              <button
+                className="button user-info__edit-button"
+                onClick={props.onEditProfile}
+              >
+                Edit
+              </button>
+              <button
+                className="button user-info__cards-button"
+                onClick={props.onShowCards}
+              >
+                Show my cards
+              </button>
+            </div>
           </div>
           <button
             className="button user-info__button"
@@ -36,7 +44,7 @@ function Main(props) {
         {props.cards.map((item) => (
           <Card
             card={item}
-            onCardClick={props.onCardClick}
+            onPicClick={props.onPicClick}
             onCardLike={props.onCardLike}
             onCardDelete={props.onCardDelete}
           />
