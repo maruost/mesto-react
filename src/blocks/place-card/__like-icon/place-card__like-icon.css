@@ -5,6 +5,7 @@
   height: 19px;
   cursor: pointer;
   transition: transform 0.3s linear;
+  margin-bottom: 10px;
 }
 
 .place-card__like-icon_disliked {

@@ -1,4 +1,6 @@
 .place-card__like-counter {
-    font-size: 10px;
-    margin-top: 10px;
+  font-size: 10px;
+  margin-top: 10px;
+  text-align: center;
+  margin: 0;
 }

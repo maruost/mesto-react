@@ -39,11 +39,13 @@ function Card(props) {
       </div>
       <div className="place-card__description">
         <h3 className="place-card__name">{props.card.name}</h3>
-        <button
-          className={cardLikeButtonClassName}
-          onClick={handleLike}
-        ></button>
-        <p className="place-card__like-counter">{props.card.likes.length}</p>
+        <div className="place-card__like-wrapper">
+          <button
+            className={cardLikeButtonClassName}
+            onClick={handleLike}
+          ></button>
+          <p className="place-card__like-counter">{props.card.likes.length}</p>
+        </div>
       </div>
     </div>
   );
