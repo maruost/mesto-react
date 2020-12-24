@@ -36,11 +36,9 @@ function App() {
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    console.log(!isLiked);
     api
       .changeLikeCardStatus("cards/like", card._id, !isLiked)
       .then((newCard) => {
-        console.log(newCard);
         const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
         setCards(newCards);
       });
@@ -48,7 +46,7 @@ function App() {
 
   function handleCardDelete(card) {
     api.deleteCard("cards", card._id).then((deletedCard) => {
-      const newCards = cards.filter((c) => c._id !== deletedCard._id);
+      const newCards = cards.filter((c) => c._id !== card._id);
       setCards(newCards);
       closeAllPopup();
     });
@@ -58,7 +56,10 @@ function App() {
       .getInitialCards("cards")
       .then((res) => {
         const newCards = res.filter((c) => c.owner._id === currentUser._id);
+        console.log(cards);
+        console.log(newCards);
         setCards(newCards);
+        console.log(cards);
       })
       .catch((err) => console.log(err));
   }
